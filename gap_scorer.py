@@ -123,7 +123,7 @@ def read_annotations(filename, is_gold):
   fieldnames = GOLD_FIELDNAMES if is_gold else SYSTEM_FIELDNAMES
 
   annotations = defaultdict(Annotation)
-  with open(filename, 'rU') as f:
+  with open(filename, 'r') as f:
     reader = csv.DictReader(f, fieldnames=fieldnames, delimiter='\t')
 
     # Skip the header line in the gold data
@@ -157,7 +157,7 @@ def calculate_scores(gold_annotations, system_annotations):
       denote no specific gender, i.e. overall scores.
   """
   scores = {}
-  for example_id, gold_annotation in gold_annotations.iteritems():
+  for example_id, gold_annotation in gold_annotations.items():
     system_annotation = system_annotations[example_id]
 
     name_a_annotations = [
@@ -259,12 +259,13 @@ if __name__ == '__main__':
   parser.add_argument(
       '--gold_tsv',
       dest='gold_tsv',
-      required=True,
       help='Path to the gold .tsv to score against. First line should contain'
       ' header information and is ignored.')
   parser.add_argument(
       '--system_tsv',
       dest='system_tsv',
-      required=True,
       help='Path to the system .tsv to score. All lines are read.')
-  main(parser.parse_args())
+  args = parser.parse_args("")
+  args.gold_tsv = 'gap-test.tsv'
+  args.system_tsv = 'test.tsv'
+  main(args)
